@@ -6,14 +6,21 @@
 > 단일 README.md 통합본(평가기 README-only 대응). 스토리보드 + 동작구조 + 핵심원리 + 심층인터뷰 인라인.
 
 ## 스크린샷 / 산출 미디어 (첨부)
-키프레임 스틸(Gemini Nano Banana, 16:9 1376×768). 영상 결과는 이 스틸을 Runway I2V 로 모션화한 클립.
-| 씬 | 키프레임 스틸 | 영상 결과(예정) |
+키프레임 스틸(Gemini Nano Banana, 16:9 1376×768). **씬2 제품 히어로샷은 실제 영상으로 생성**([`video/scene2_product_hero.mp4`](./video/scene2_product_hero.mp4)) — 학습 네이토 영상 생성 기능(Google **Veo 3.1 Fast**, 720p, 4초)으로 텍스트→영상(T2V) 직접 생성. 씬1·3은 스틸 기준 예정.
+| 씬 | 키프레임 스틸 | 영상 결과 |
 |---|---|---|
-| 씬1 | ![씬1 구성](./img/scene1.png) | 흐린 아침 톤 일회용컵 3초 클립 |
-| 씬2 | ![씬2 구성](./img/scene2.png) | 밝은 제품 히어로 4초 클립 + BGM |
-| 씬3 | ![씬3 구성](./img/scene3.png) | 로고+슬로건 엔드카드 3초 |
+| 씬1 | ![씬1 구성](./img/scene1.png) | 흐린 아침 톤 일회용컵 3초 클립(예정) |
+| 씬2 | ![씬2 구성](./img/scene2.png) | ✅ [밝은 제품 히어로 4초 클립](./video/scene2_product_hero.mp4) (Veo 3.1 Fast, 720p) |
+| 씬3 | ![씬3 구성](./img/scene3.png) | 로고+슬로건 엔드카드 3초(예정) |
 
 최종 영상: `EcoSip_ad_10s.mp4` (1080p / 24fps / H.264·AAC).
+
+### 씬2 실제 생성 기록 (학습 네이토 T2V)
+- **도구**: 학습 네이토(코디세이 학습맵 내장 멀티모달) 영상 생성 — 외부 웹 도구 대신 플랫폼 내장 파이프라인 사용.
+- **모델**: Google Veo 3.1 Fast · 해상도 720p · 길이 4초 · 텍스트→영상(참조 이미지 없이 프롬프트만).
+- **프롬프트**: `EcoSip matte-black eco tumbler on a wooden cafe table, warm morning light, slow dolly-in, product hero shot.`
+- **결과**: `video/scene2_product_hero.mp4` (H.264 MP4, ~1.0MB). 스토리보드 씬2("밝은 제품 히어로") 구현.
+- **비용**: 133,336 virtualTokens(1건). 참고로 Veo 표준·8초는 월 쿼터(1,000,000 vt)를 초과해 거부됨 → Fast·4초로 실현.
 
 ---
 
@@ -67,7 +74,7 @@
 | 유형 | 도구 | 선택 이유 |
 |---|---|---|
 | 이미지 | Gemini (Nano Banana) | 제품 질감·자연광 표현 우수, 한글 로고·슬로건 텍스트 렌더 안정(엔드카드 직접 생성) |
-| 비디오 | Runway Gen-3 | 정지 이미지→자연스러운 모션 변환(I2V) 안정적 |
+| 비디오 | 학습 네이토 내장 **Veo 3.1 Fast**(실사용, 씬2) / Runway Gen-3(계획) | 플랫폼 내장 T2V로 프롬프트만으로 제품 히어로 클립 직접 생성(참조 이미지 불필요), 빠르고 쿼터 효율적 |
 | 오디오 | Suno | 10초 광고용 짧은 어쿠스틱 BGM 생성 |
 | (음성) | ElevenLabs | 내레이션 TTS, 따뜻한 톤 |
 
@@ -109,6 +116,6 @@
 - 립싱크: 씬2 내레이션을 인물 발화 컷으로 확장 시 Lip-sync 적용 가능.
 
 ## 제약/환경 기록
-- 모델: 이미지=Gemini(Nano Banana, gemini.google.com 웹·무료) / 영상=Runway Gen-3 / 오디오=Suno·ElevenLabs(유료 크레딧). 채널: 웹. 사용일 2026-07-02.
+- 모델: 이미지=Gemini(Nano Banana, gemini.google.com 웹·무료) / 영상=**학습 네이토 내장 Veo 3.1 Fast**(씬2 실생성, 720p·4초) 및 Runway Gen-3(계획) / 오디오=Suno·ElevenLabs(유료 크레딧). 채널: 웹 + 코디세이 학습맵 내장 멀티모달. 사용일 2026-07-02~03.
 - 소스: 전부 생성형 AI 결과물(직접 촬영·유료 스톡 미사용). 딥페이크·유해 콘텐츠 없음.
 - 편집 SW(CapCut)는 컷·자막·색보정·오디오 레벨 등 통합 편집 용도로만 제한 사용.
