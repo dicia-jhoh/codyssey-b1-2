@@ -10,7 +10,7 @@
 | 씬 | 키프레임 스틸 | 영상 결과 |
 |---|---|---|
 | 씬1 | ![씬1 구성](./img/scene1.png) | 흐린 아침 톤 일회용컵 3초 클립(예정) |
-| 씬2 | ![씬2 구성](./img/scene2.png) | ✅ [밝은 제품 히어로 4초 클립](./video/scene2_product_hero.mp4) (Veo 3.1 Fast, 720p) |
+| 씬2 | ![씬2 구성](./img/scene2.png) | ✅ [Veo 3.1 Fast · 4초](./video/scene2_product_hero.mp4) / [Sora 2 · 8초(권장)](./video/scene2_product_hero_sora_8s.mp4) |
 | 씬3 | ![씬3 구성](./img/scene3.png) | 로고+슬로건 엔드카드 3초(예정) |
 
 최종 영상: `EcoSip_ad_10s.mp4` (1080p / 24fps / H.264·AAC).
@@ -19,8 +19,12 @@
 - **도구**: 학습 네이토(코디세이 학습맵 내장 멀티모달) 영상 생성 — 외부 웹 도구 대신 플랫폼 내장 파이프라인 사용.
 - **모델**: Google Veo 3.1 Fast · 해상도 720p · 길이 4초 · 텍스트→영상(참조 이미지 없이 프롬프트만).
 - **프롬프트**: `EcoSip matte-black eco tumbler on a wooden cafe table, warm morning light, slow dolly-in, product hero shot.`
-- **결과**: `video/scene2_product_hero.mp4` (H.264 MP4, ~1.0MB). 스토리보드 씬2("밝은 제품 히어로") 구현.
-- **비용**: 133,336 virtualTokens(1건). 참고로 Veo 표준·8초는 월 쿼터(1,000,000 vt)를 초과해 거부됨 → Fast·4초로 실현.
+- **결과**:
+  - `video/scene2_product_hero.mp4` — Veo 3.1 Fast, 720p, 4초 (~1.0MB, 133,336 vt)
+  - `video/scene2_product_hero_sora_8s.mp4` — **OpenAI Sora 2, 1280×720, 8초 (2.7MB, 266,672 vt) — 권장본**
+- **모델·길이 실측 결론**: 학습 네이토 영상은 **모델당 최대 8초**(Veo Fast·Sora 2 동일, 9초↑은
+  provider_error). 초당 **33,334 vt 고정 관세**(4초=133,336 / 8초=266,672). 표준·Pro 모델은 최소
+  4초 1건이 월 쿼터(1,000,000)를 초과해 사용 불가. → **Sora 2 · 8초**가 실사용 최장·최선.
 
 ---
 
