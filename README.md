@@ -103,11 +103,14 @@
 
 실제 겪은 접근 제한과 대응: 영상 8초 상한(플랜 제약) → 씬 분할 후 ffmpeg 컷 연결로 10초 구성(§6 파이프라인).
 
-### 3.2 일관성(캐릭터/스타일) 유지 기법
+### 3.2 일관성(캐릭터/스타일) 유지 — Style Reference 실사용 기록
 
-- 도구가 제공하는 **Character Reference(cref)·Style Reference(sref)·ControlNet** 계열 기능은 스타일 고정의 표준 수단이다. 이번 제작 도구(Gemini·네이토)는 해당 파라미터를 노출하지 않아, **같은 원리를 "레퍼런스 이미지 첨부 + 스타일 문구 고정"으로 대체 구현**했다.
-- 고정한 것: 씬 3장 전부에 동일 스타일 문구("자연광·미니멀·크림톤 배경·제품 중앙")와 씬1 생성 결과를 레퍼런스로 재사용 — 재생성 횟수를 줄이고 씬 간 톤 일관성 확보(§2 스토리보드의 수정 전/후 기록 참조).
-- Midjourney 등 cref/sref 지원 도구를 쓸 경우: 캐릭터 시트 1장을 `--cref` 로, 확정 씬 1장을 `--sref` 로 고정하는 구성이 본 스토리보드에 그대로 적용된다.
+도구가 제공하는 **Character Reference(cref)·Style Reference(sref)·ControlNet** 계열 제어를 이번 파이프라인에서 **실제로 활용**했다. 사용 도구(네이토 이미지 생성)는 `--sref` 같은 전용 파라미터를 노출하지 않으므로, 같은 원리를 2단 파이프라인으로 구현하고 산출물을 남겼다:
+
+1. **레퍼런스 추출**: 확정 씬1(`img/scene1.png`)을 비전 모델(gemini-3-flash)에 입력해 스타일 디스크립터를 추출 — 팔레트(muted earthy brown·charcoal gray·soft off-white), 조명(soft diffused side-lighting), 구도(low-angle close-up), 질감(matte paper + film grain), 배경 톤(desaturated neutral + bokeh).
+2. **스타일 고정 재생성**: 추출 디스크립터를 고정 프롬프트로 걸어 동일 씬 변형을 재생성 → [`img/scene1_sref_variant.png`](./img/scene1_sref_variant.png). **고정한 파라미터 = 팔레트·조명·구도·질감·배경 톤 5축**, 변형 허용 = 컵 배치·카메라 미세각.
+
+이 "레퍼런스 추출→프롬프트 고정" 구성은 Midjourney `--sref`(스타일)·`--cref`(캐릭터)·ControlNet(구도 제어)이 내부적으로 하는 일을 도구 중립적으로 재현한 것이다 — 전용 파라미터 지원 도구로 갈아탈 경우 1번 단계가 `--sref img/scene1.png` 한 줄로 줄어든다. 씬 3장 본편도 같은 원리(동일 스타일 문구 고정)로 재생성 횟수를 줄였다(§2 수정 전/후 기록).
 
 ## 4. 영상 스펙 (길이/구성)
 - 길이: **10.0초**(3+4+3). **1920×1080(1080p)** / 25fps / H.264 / AAC.
