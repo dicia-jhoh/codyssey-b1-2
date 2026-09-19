@@ -26,12 +26,12 @@
 |---|---|---|---|
 | 이미지(T2I) | **Gemini (Nano Banana)** | scene1~3.png (16:9) | 웹. 한글 로고·슬로건 텍스트 직접 렌더 → 엔드카드 후합성 불필요 |
 | 비디오(T2V) | **학습 네이토 내장 Sora 2 / Veo 3.1 Fast** | 씬2 히어로 클립(8초·4초) | 네이토 T2V, 네이티브 오디오 포함. 두 도구 A/B 후 Sora 2 채택 |
-| 비디오(I2V 연출) | Gemini 스틸 → **시네마틱 슬로줌** | 최종 영상 씬1·3 구간 | 텍스트 안정성(엔드카드 한글 보존) 위해 스틸 기반 카메라 무빙 연출 |
+| 스틸 모션(비디오 모델 아님) | Gemini 스틸 → ffmpeg **시네마틱 슬로줌** | 최종 영상 씬1·3 구간 | AI 스틸에 카메라 무빙만 준 것(I2V 생성 아님). 텍스트 안정성(엔드카드 한글 보존) 때문에 택함 |
 | 오디오/음성 | **학습 네이토 내장 TTS**(tts-1 · nova) | audio/narration.mp3 | 3카피 따뜻한 톤 한국어 내레이션 |
 | 통합 편집 | ffmpeg(concat · 오디오 mux · 9:16 변환) | EcoSip_ad_10s.mp4 · _9x16 | 컷 연결·오디오 레벨·비율 변환(생성은 전부 AI) |
 
 ### 씬2 T2V 생성 기록 (학습 네이토)
-- **프롬프트**: `EcoSip matte-black eco tumbler on a wooden cafe table, warm morning light, slow dolly-in, product hero shot.`
+- **프롬프트(Sora 2 실투입 원문)**: `Cinematic product hero shot: sleek matte-black EcoSip reusable tumbler on a light wooden cafe table by a window, warm morning light, shallow depth of field, slow smooth dolly-in, premium eco advertising, no text no logos` — 네이토 미디어 생성 로그(2026-07-04 16:36, `sora-2` 1280x720)에서 그대로 옮겼다. §2 씬2·수정 전/후의 '후'도 이 한 문장이다.
 - **A/B 결과**: `scene2_product_hero.mp4`(Veo 3.1 Fast·720p·4초) / `scene2_product_hero_sora_8s.mp4`(**Sora 2·1280×720·8초, 채택**). Sora 2가 제품 형태·질감·조명 보존 우수 → 채택, 최종 영상엔 앞 4초를 씬2로 사용.
 
 ---
@@ -52,7 +52,7 @@
 - 목표 메시지: 일회용 컵의 죄책감 환기
 - 화면 구성(구도/피사체/배경/텍스트): 클로즈업 / 쌓인 일회용 컵 / 흐린 아침 톤 / 텍스트 없음
 - 내레이션(카피): "매일 무심코 버린 한 잔."
-- 사용 도구(목적): 이미지=Gemini(Nano Banana), 모션=시네마틱 슬로줌인(스틸→모션)
+- 사용 도구(목적): 이미지=Gemini(Nano Banana), 모션=ffmpeg 시네마틱 슬로줌인(스틸 모션 — 비디오 생성 모델 아님)
 - 입력 프롬프트(원문): `paper coffee cups overflowing in a bin, muted desaturated tone, morning light, cinematic close-up`
 - 출력 결과 요약: 흐린 아침 톤 일회용 컵 더미(scene1.png) → 슬로줌인 3초
 - 결과: 최종 영상 0~3초 구간
@@ -63,7 +63,7 @@
 - 화면 구성: 제품 히어로샷 / 밝은 자연광 전환 / 제품 중심 / 텍스트 없음
 - 내레이션(카피): "이제, 버리지 않아도 가볍게."
 - 사용 도구(목적): 비디오=학습 네이토 Sora 2(T2V, 네이티브 오디오), A/B=Veo 3.1 Fast
-- 입력 프롬프트(원문): `EcoSip matte-black eco tumbler on a wooden cafe table, warm morning light, slow dolly-in, product hero shot`
+- 입력 프롬프트(원문): `Cinematic product hero shot: sleek matte-black EcoSip reusable tumbler on a light wooden cafe table by a window, warm morning light, shallow depth of field, slow smooth dolly-in, premium eco advertising, no text no logos`
 - 출력 결과 요약: 밝은 톤 제품 히어로 클립(scene2 Sora 2 앞 4초)
 - 결과: 최종 영상 3~7초 구간
 
@@ -72,15 +72,15 @@
 - 목표 메시지: 브랜드 각인 + CTA
 - 화면 구성: 텀블러 + 로고 + 슬로건 / 오프화이트 배경 / 하단 CTA 텍스트
 - 내레이션(카피): "에코십. 한 번의 선택, 매일의 지속."
-- 사용 도구(목적): 이미지=Gemini(Nano Banana, 로고·한글 슬로건 직접 렌더), 모션=시네마틱 슬로줌아웃
+- 사용 도구(목적): 이미지=Gemini(Nano Banana, 로고·한글 슬로건 직접 렌더), 모션=ffmpeg 시네마틱 슬로줌아웃(스틸 모션)
 - 입력 프롬프트(원문): `minimal off-white end card, silver EcoSip tumbler centered on a round plate, logo "EcoSip" with leaf mark, Korean slogan "한 번의 선택, 매일의 지속", underlined CTA "지금 함께하기", clean typography`
 - 출력 결과 요약: 로고+슬로건 엔드카드(scene3.png) → 슬로줌아웃 3초
 - 결과: 최종 영상 7~10초 구간
 
 ### 프롬프트 수정 전/후 (씬 2)
 - **전**: `tumbler on table` → 평범한 정물, 브랜드 느낌 없음.
-- **후**: `sleek matte black EcoSip tumbler ... product hero shot, warm morning light, slow dolly-in` → 제품 히어로샷, 톤 일관.
-- **변경 이유/결과**: 재질·조명·구도·카메라 무빙을 명시 → 브랜드 톤(미니멀·따뜻) 정렬, 일관성 확보. (실제 T2V 결과 = 씬2 클립)
+- **후**(실투입 원문 그대로): `Cinematic product hero shot: sleek matte-black EcoSip reusable tumbler on a light wooden cafe table by a window, warm morning light, shallow depth of field, slow smooth dolly-in, premium eco advertising, no text no logos` → 제품 히어로샷, 톤 일관.
+- **변경 이유/결과**: 재질(matte-black)·조명(warm morning light)·구도(shallow depth of field)·카메라 무빙(slow smooth dolly-in)을 명시하고 `no text no logos` 로 T2V 의 글자 깨짐을 막았다 → 브랜드 톤(미니멀·따뜻) 정렬, 일관성 확보. (실제 T2V 결과 = 씬2 클립)
 
 ## 3. 멀티모달 생성 도구 (각 1종+, 선택 이유)
 | 유형 | 도구 | 선택 이유 |
@@ -146,7 +146,7 @@
 - **Q. 60초 버전을 15초로 줄여야 한다면 씬을 어떻게 재구성?** → ① 핵심 메시지 1개만 남기고 서브 컷 제거(문제→해결→CTA 3비트 압축). ② 씬당 2초 내 단축, 전환 컷 위주. ③ 내레이션은 슬로건 1줄 + 엔드카드 CTA만. ④ 6씬→3씬(문제 1/제품 1/엔드카드 1) 머지, 브랜드 장치(로고·슬로건)는 마지막 3초 필수 보존. ⑤ 자막 키워드 1개씩 노출로 정보 밀도 보강.
 
 ## 9. 보너스 (수행)
-- **립싱크(인물 발화 장면)**: [`video/scene4_spokesperson.mp4`](./video/scene4_spokesperson.mp4) — 카페에서 EcoSip 텀블러를 든 화자가 카메라를 보고 **"오늘부터, 에코십과 함께해요!"** 를 발화하는 4초 클립. 학습 네이토 **Veo 3.1 Fast** T2V 로 생성 — Veo 는 대사·입모양·음성을 한 번에 생성(네이티브 오디오)하므로 별도 립싱크 후처리 없이 입모양과 대사가 동기화된다(오디오 트랙 내장, ffprobe 확인).
+- **립싱크(인물 발화 장면)**: [`video/scene4_spokesperson.mp4`](./video/scene4_spokesperson.mp4) — 카페에서 EcoSip 텀블러를 든 화자가 카메라를 보고 **"오늘부터, 에코십과 함께해요!"** 를 발화하는 4초 클립. 학습 네이토 **Veo 3.1 Fast** T2V 로 생성 — Veo 는 대사·입모양·음성을 한 번에 생성(네이티브 오디오)하므로 별도 립싱크 후처리 없이 입모양과 대사가 동기화된다(오디오 트랙 내장, ffprobe 확인). **본편과의 연결**: 10초 본편에는 넣지 않은 별도 클립이다. 쓸 때는 씬2(제품 등장)와 씬3(엔드카드) 사이에 4초로 끼워 14초 확장판을 만들고, 그 4초 구간은 내레이션을 비우고 클립의 네이티브 음성을 쓴다 — 두 목소리가 겹치지 않게 하고, 화자의 대사 "오늘부터, 에코십과 함께해요!" 가 씬3 CTA "지금 함께하기" 로 바로 이어지게 하려는 배치다.
 - **플랫폼별 비율(9:16)**: [`video/EcoSip_ad_10s_9x16.mp4`](./video/EcoSip_ad_10s_9x16.mp4) — 1080×1920 릴스/쇼츠 세로형 출력(센터크롭). 16:9 원본과 2버전 확보.
 - **동일 스토리보드 다른 도구 재제작**: 씬2 히어로를 **Veo 3.1 Fast**와 **Sora 2** 두 도구로 각각 T2V 생성(파일 2종) → 도구 간 품질 대조 후 채택.
 
